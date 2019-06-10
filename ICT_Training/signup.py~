@@ -17,19 +17,12 @@ conn = mysql.connector.connect(
 app = Flask(__name__)
 
 #signinに飛ぶと実行すること
-@app.route('/signin', methods=['POST'])
+@app.route('/signup', methods=['POST'])
 #この時に使う関数を定義
-def api_signin():
+def api_signup():
     #postされてきたJSONデータを辞書型にパースする
     data = request.get_json()
-    #print(data)
-    #dataの中にあるuseridの中身の文字列を取得するなら・・・
-    #data["userid"]
-    cur = conn.cursor()
-    msg = 'SELECT access_token FROM users WHERE userid="' + data["userid"] + '" AND password="' + data["password"] + '"'
-    #print(msg)
-    cur.execute(str(msg))
-    return jsonify(cur.fetchall())
+    
 
 #ぶっちゃけた話、これおまじない程度の認識です
 if __name__ == "__main__":

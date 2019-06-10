@@ -2,6 +2,6 @@ CREATE TABLE users(
   id INT NOT NULL AUTO_INCREMENT,
   userid VARCHAR(32) NOT NULL,
   password VARCHAR(32) NOT NULL,
-  access_token VARCHAR(32) NOT NULL,
+  access_token VARCHAR(128) NOT NULL,
   PRIMARY KEY (id)
 );
