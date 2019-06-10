@@ -3,12 +3,12 @@ from urllib.parse import urlparse
 import mysql.connector
 
 #立てているサーバがどこにあるのをここに書いておく
-url = urlparse('mysql://user:password@localhost:3306/sample_db')
+url = urlparse('mysql://user:password@127.0.0.1:3314/sample_db')
 
 #dockerで立てたSQLサーバにアクセスする
 conn = mysql.connector.connect(
     host = url.hostname or 'localhost',
-    port = url.port or 3306,
+    port = url.port or 3314,
     user = url.username or 'root',
     password = url.password or '',
     database = url.path[1:],
@@ -16,11 +16,15 @@ conn = mysql.connector.connect(
 
 app = Flask(__name__)
 
-#signinに飛ぶと、POST methodを使ってくれる
-@app.route("/signin", methods=["POST"])
+#signinに飛ぶと実行すること
+@app.route("/signin", methods=["GET"])
 #この時に使う関数を定義
 def api_signin():
     conn.is_connected()
+    cur = conn.cursor(dictionary=True)
+    cur.execute('SELECT * FROM users')
+    cur.fetchall()
+    return jsonify(cur)
 
 #ぶっちゃけた話、これおまじない程度の認識です
 if __name__ == "__main__":
