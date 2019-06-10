@@ -20,11 +20,11 @@ app = Flask(__name__)
 @app.route("/signin", methods=["GET"])
 #この時に使う関数を定義
 def api_signin():
-    conn.is_connected()
-    cur = conn.cursor(dictionary=True)
-    cur.execute('SELECT * FROM users')
-    cur.fetchall()
-    return jsonify(cur)
+    #print(conn.is_connected())
+    cur = conn.cursor()
+    cur.execute('SELECT access_token FROM users')
+    #print(cur.fetchall())
+    return jsonify(cur.fetchall())
 
 #ぶっちゃけた話、これおまじない程度の認識です
 if __name__ == "__main__":
