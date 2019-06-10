@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from urllib.parse import urlparse
 import mysql.connector
 
@@ -17,13 +17,18 @@ conn = mysql.connector.connect(
 app = Flask(__name__)
 
 #signinに飛ぶと実行すること
-@app.route("/signin", methods=["GET"])
+@app.route('/signin', methods=['POST'])
 #この時に使う関数を定義
 def api_signin():
-    #print(conn.is_connected())
+    #postされてきたJSONデータを辞書型にパースする
+    data = request.get_json()
+    print(data)
+    #dataの中にあるuseridの中身の文字列を取得するなら・・・
+    #data["userid"]
     cur = conn.cursor()
-    cur.execute('SELECT access_token FROM users')
-    #print(cur.fetchall())
+    msg = 'SELECT access_token FROM users WHERE userid="' + data["userid"] + '" AND password="' + data["password"] + '"'
+    print(msg)
+    cur.execute(str(msg))
     return jsonify(cur.fetchall())
 
 #ぶっちゃけた話、これおまじない程度の認識です
