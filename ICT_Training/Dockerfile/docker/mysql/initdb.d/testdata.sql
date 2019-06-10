@@ -1,1 +1,1 @@
-INSERT INTO users (id,name,email) VALUES (1, 'TOM', 'example@ex.com');
+INSERT INTO users (id,userid,password) VALUES (1, 'cloud-fun', 'cloud-fun');
