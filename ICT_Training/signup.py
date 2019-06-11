@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from urllib.parse import urlparse
 import mysql.connector
-import uuid
+import secrets
 
 #立てているサーバがどこにあるのをここに書いておく
 url = urlparse('mysql://user:password@127.0.0.1:3314/sample_db')
@@ -25,11 +25,22 @@ def api_signup():
     data = request.get_json()
     #print("受け取ったJSONデータ：")
     #print(data)
-    #uuidを作成して、それをaccess_tokenとする
-    access_token = str(uuid.uuid4())
 
-    #SQLに追加するのでcurを召喚
+    #SQLを利用するのでcur宣言
     cur = conn.cursor()
+
+    #access_tokenがかぶらないような文字れるであるまで生成する
+    while(True):
+        #access_tokenを生成する
+        access_token = secrets.token_hex()
+        #すでに存在しているアクセストークンでないことを確認
+        msg = "SELECT access_token FROM users WHERE access_token='" + access_token + "'"
+        cur.execute(str(msg))
+        #かぶりがなかったら、[]が返される
+        if(cur.fetchall()==[]):
+            break
+
+    
 
     #idの番号が今いくつが最大か取得してくる
     #print("idの最大値を取得してきます。")
