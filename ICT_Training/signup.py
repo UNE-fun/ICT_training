@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from urllib.parse import urlparse
 import mysql.connector
 import secrets
@@ -65,7 +65,10 @@ def api_signup():
     #print("DBに確認しに行くときのSQL文：")
     #print(msg)
     cur.execute(str(msg))
-    return jsonify(cur.fetchall())
+    #ステータスコード201を返すよ
+    resp = jsonify(cur.fetchall())
+    resp.status_code = 201
+    return resp
 
 #ぶっちゃけた話、これおまじない程度の認識です
 if __name__ == "__main__":
