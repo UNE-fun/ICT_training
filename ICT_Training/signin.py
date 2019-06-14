@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from urllib.parse import urlparse
 import mysql.connector
+import hashlib
 
 #立てているサーバがどこにあるのをここに書いておく
 url = urlparse('mysql://user:password@127.0.0.1:3314/sample_db')
@@ -26,7 +27,7 @@ def api_signin():
     #dataの中にあるuseridの中身の文字列を取得するなら・・・
     #data["userid"]
     cur = conn.cursor()
-    msg = 'SELECT access_token FROM users WHERE userid="' + data["userid"] + '" AND password="' + data["password"] + '"'
+    msg = 'SELECT access_token FROM users WHERE userid="' + data["userid"] + '" AND password="' + hashlib.sha256(data["password"].encode()).hexdigest() + '"'
     #print(msg)
     cur.execute(str(msg))
     return jsonify(cur.fetchall())
