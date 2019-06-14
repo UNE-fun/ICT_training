@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, Response
 from urllib.parse import urlparse
 import mysql.connector
 import secrets
+import hashlib
 
 #立てているサーバがどこにあるのをここに書いておく
 url = urlparse('mysql://user:password@127.0.0.1:3314/sample_db')
@@ -25,6 +26,10 @@ def api_signup():
     data = request.get_json()
     #print("受け取ったJSONデータ：")
     #print(data)
+
+    #data.passwordを暗号化してtempに格納
+    data["password"] = hashlib.sha256(data["password"].encode()).hexdigest()
+    print(data)
 
     #SQLを利用するのでcur宣言
     cur = conn.cursor()
@@ -68,6 +73,7 @@ def api_signup():
     #ステータスコード201を返すよ
     resp = jsonify(cur.fetchall())
     resp.status_code = 201
+    
     return resp
 
 #ぶっちゃけた話、これおまじない程度の認識です
