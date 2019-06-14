@@ -17,8 +17,6 @@ conn = mysql.connector.connect(
 
 app = Flask(__name__)
 
-#signinに飛ぶと実行すること
-@app.route('/signin', methods=['POST'])
 #この時に使う関数を定義
 def api_signin():
     #postされてきたJSONデータを辞書型にパースする
@@ -30,11 +28,5 @@ def api_signin():
     msg = 'SELECT access_token FROM users WHERE userid="' + data["userid"] + '" AND password="' + hashlib.sha256(data["password"].encode()).hexdigest() + '"'
     #print(msg)
     cur.execute(str(msg))
+    cur.commit()
     return jsonify(cur.fetchall())
-
-#ぶっちゃけた話、これおまじない程度の認識です
-if __name__ == "__main__":
-    #デバッグを許可する
-    app.debug = True
-    #実行開始
-    app.run();
