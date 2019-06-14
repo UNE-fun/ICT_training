@@ -5,3 +5,5 @@ CREATE TABLE users(
   access_token VARCHAR(128) NOT NULL,
   PRIMARY KEY (id)
 );
+
+INSERT into users (id, userid, password, access_token) VALUES (0, "hoge", "hoge", "hoge");
